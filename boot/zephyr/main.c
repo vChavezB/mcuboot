@@ -69,7 +69,7 @@
 
 #endif /* CONFIG_SOC_FAMILY_ESPRESSIF_ESP32 */
 
-#ifdef CONFIG_MCUBOOT_SERIAL
+#if defined(CONFIG_MCUBOOT_SERIAL) || defined(CONFIG_MCUBOOT_CAN)
 #include "boot_serial/boot_serial.h"
 #include "serial_adapter/serial_adapter.h"
 
@@ -387,7 +387,7 @@ void zephyr_boot_log_stop(void)
         * !defined(CONFIG_LOG_PROCESS_THREAD) && !defined(ZEPHYR_LOG_MODE_MINIMAL)
         */
 
-#ifdef CONFIG_MCUBOOT_SERIAL
+#if defined(CONFIG_MCUBOOT_SERIAL) || defined(CONFIG_MCUBOOT_CAN)
 static void boot_serial_enter()
 {
     int rc;

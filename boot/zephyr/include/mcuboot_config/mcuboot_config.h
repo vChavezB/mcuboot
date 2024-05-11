@@ -209,7 +209,7 @@
 #define MCUBOOT_VERIFY_IMG_ADDRESS
 #endif
 
-#ifdef CONFIG_MCUBOOT_SERIAL
+#if defined(CONFIG_MCUBOOT_SERIAL) || defined(CONFIG_MCUBOOT_CAN)
 #define MCUBOOT_SERIAL
 #endif
 

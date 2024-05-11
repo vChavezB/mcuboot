@@ -273,6 +273,30 @@ if(CONFIG_MCUBOOT_SERIAL)
   endif()
 endif()
 
+if(CONFIG_MCUBOOT_CAN)
+  zephyr_sources(${BOOT_DIR}/zephyr/can_adapter.c)
+  zephyr_sources(${BOOT_DIR}/boot_serial/src/boot_serial.c)
+  zephyr_sources(${BOOT_DIR}/boot_serial/src/zcbor_bulk.c)
+
+  zephyr_include_directories(${BOOT_DIR}/bootutil/include)
+  zephyr_include_directories(${BOOT_DIR}/boot_serial/include)
+  zephyr_include_directories(include)
+
+  zephyr_include_directories_ifdef(
+    CONFIG_BOOT_ERASE_PROGRESSIVELY
+    ${BOOT_DIR}/bootutil/src
+    )
+
+  if(CONFIG_BOOT_ENCRYPT_IMAGE)
+    zephyr_library_sources(
+      ${BOOT_DIR}/boot_serial/src/boot_serial_encryption.c
+    )
+  endif()
+endif()
+
+
+
+
 if(NOT CONFIG_BOOT_SIGNATURE_KEY_FILE STREQUAL "")
   # CONF_FILE points to the KConfig configuration files of the bootloader.
   foreach (filepath ${CONF_FILE})

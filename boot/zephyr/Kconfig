@@ -595,7 +595,7 @@ config MCUBOOT_INDICATION_LED
 	  definitions for this to work.
 
 rsource "Kconfig.serial_recovery"
-
+rsource "Kconfig.can_recovery"
 rsource "Kconfig.firmware_loader"
 
 config BOOT_INTR_VEC_RELOC
