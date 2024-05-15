@@ -119,6 +119,7 @@ console_write(const char *str, int cnt)
 	if (eof_idx != -1) {
 		cnt = eof_idx;
 	}
+
 	while(cnt > 0) {
 		int len = cnt > CAN_MAX_DLC ? CAN_MAX_DLC : cnt;
 		frame.id = CONFIG_MCUBOOT_CAN_TX_ID;
@@ -171,6 +172,9 @@ boot_console_init(void)
 	}
 
 	int rc = can_start(can_dev);
+	if (rc !=0) {
+		return rc;
+	}
 
 	//calling can_add_rx_filter does not work, the filter checks in the implementation (mcux can driver)
 	// always fail. Instead call the api directly. 
