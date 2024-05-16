@@ -15,7 +15,7 @@ BOOT_LOG_MODULE_REGISTER(can_adapter);
 
 static const struct can_filter smp_rx_filter = {
 	.id = CONFIG_MCUBOOT_CAN_RX_ID,
-	.mask =  CAN_EXT_ID_MASK,
+	.mask =  CONFIG_MCUBOOT_CAN_RX_ID > CAN_STD_ID_MASK ? CAN_EXT_ID_MASK : CAN_STD_ID_MASK,
 	.flags = CONFIG_MCUBOOT_CAN_RX_ID > CAN_STD_ID_MASK ? CAN_FILTER_IDE: 0
 };
 
@@ -176,13 +176,10 @@ boot_console_init(void)
 		return rc;
 	}
 
-	//calling can_add_rx_filter does not work, the filter checks in the implementation (mcux can driver)
-	// always fail. Instead call the api directly. 
-	// This was noticed becuase can_add_rx_filter_msgq does not
-	// have this check and works fine.
-	//const int filter_id = can_add_rx_filter(can_if, can_rx_cb, self, );
-	const struct can_driver_api *api = (const struct can_driver_api *)can_dev->api;
+	rc = can_add_rx_filter(can_dev, can_rx_cb, NULL, &smp_rx_filter);
 
-	rc = api->add_rx_filter(can_dev, can_rx_cb, NULL, &smp_rx_filter);
+	if (rc < 0 ) {
+		rc = -EINVAL;
+	}
 	return rc;
 }
