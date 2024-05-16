@@ -120,14 +120,6 @@ menuconfig BOOT_SERIAL_ENTRANCE_GPIO
 	help
 	  Use a GPIO to enter serial recovery mode.
 
-config BOOT_SERIAL_DETECT_DELAY
-	int "CAN detect pin detection delay time [ms]"
-	default 0
-	depends on BOOT_SERIAL_ENTRANCE_GPIO
-	help
-	  Used to prevent the bootloader from loading on button press.
-	  Useful for powering on when using the same button as
-	  the one used to place the device in bootloader mode.
 
 menuconfig BOOT_SERIAL_WAIT_FOR_DFU
 	bool "Wait a prescribed duration to see if DFU is invoked by receiving a MCUmgr comand"
@@ -165,6 +157,15 @@ config BOOT_SERIAL_PIN_RESET
 	  remain in bootloader serial recovery mode if it was.
 
 endmenu
+
+config BOOT_SERIAL_DETECT_DELAY
+	int "CAN detect pin detection delay time [ms]"
+	default 0
+	depends on BOOT_SERIAL_ENTRANCE_GPIO || BOOT_SERIAL_WAIT_FOR_DFU
+	help
+	  Used to prevent the bootloader from loading on button press.
+	  Useful for powering on when using the same button as
+	  the one used to place the device in bootloader mode.
 
 config BOOT_SERIAL_IMG_GRP_HASH
 	bool "Image list hash support"

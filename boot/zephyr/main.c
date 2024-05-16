@@ -507,13 +507,14 @@ int main(void)
 #endif
 
 #ifdef CONFIG_BOOT_SERIAL_WAIT_FOR_DFU
-    timeout_in_ms -= (k_uptime_get_32() - start);
-    if( timeout_in_ms <= 0 ) {
-        /* at least one check if time was expired */
-        timeout_in_ms = 1;
+    if (io_detect_pin()) {
+        timeout_in_ms -= (k_uptime_get_32() - start);
+        if( timeout_in_ms <= 0 ) {
+            /* at least one check if time was expired */
+            timeout_in_ms = 1;
+        }
+        boot_serial_check_start(&boot_funcs,timeout_in_ms);
     }
-    boot_serial_check_start(&boot_funcs,timeout_in_ms);
-
 #ifdef CONFIG_MCUBOOT_INDICATION_LED
     io_led_set(0);
 #endif
