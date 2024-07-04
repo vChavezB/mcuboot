@@ -486,7 +486,6 @@ int main(void)
      * some time, so it's better to reuse thistime to already receive the
      * initial mcumgr command(s) into our buffers
      */
-    rc = boot_console_init();
     int timeout_in_ms = CONFIG_BOOT_SERIAL_WAIT_FOR_DFU_TIMEOUT;
     uint32_t start = k_uptime_get_32();
 
@@ -513,6 +512,7 @@ int main(void)
             /* at least one check if time was expired */
             timeout_in_ms = 1;
         }
+        boot_console_init();
         boot_serial_check_start(&boot_funcs,timeout_in_ms);
     }
 #ifdef CONFIG_MCUBOOT_INDICATION_LED
